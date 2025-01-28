@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float _bulletLifeTime = 3f;
     [SerializeField] public float _bulletDamage;
-    
-    private void Awake()
+    [SerializeField] public Rigidbody _rigidbody;
+    public void Init(float destroyTime)
     {
-        Destroy(gameObject, _bulletLifeTime);
+        Destroy(gameObject, destroyTime);
     }
 
     private void OnCollisionEnter(Collision collision)
