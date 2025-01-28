@@ -13,10 +13,16 @@ public class Bullet : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Enemy enemy = collision.collider.GetComponent<Enemy>();
+        CityHeath player = collision.collider.GetComponentInParent<CityHeath>();
+        Enemy enemy = collision.collider.GetComponentInParent<Enemy>();
+        //Enemy enemy = collision.collider.GetComponent<Enemy>();
         if (enemy != null)
             enemy.TakeDamage(_bulletDamage);
+        if (player != null)
+            player.TakeDamage(_bulletDamage);
         
-        Destroy(gameObject);
+        Bullet bullet = collision.collider.GetComponent<Bullet>();
+        if (bullet == null)
+            Destroy(gameObject);
     }
 }

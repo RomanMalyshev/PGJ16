@@ -199,6 +199,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _bar: {fileID: 5767038754169339213}
+  _speed: 10
+  _homeSpot: {fileID: 0}
+  _patrolDistance: 5
+  _chaseDistance: 10
 --- !u!1 &8420112775345255092
 GameObject:
   m_ObjectHideFlags: 0

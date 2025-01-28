@@ -13,7 +13,6 @@ public class Weapon : MonoBehaviour
     [SerializeField] private Transform _bulletSpawner;
     [SerializeField] private Camera _camera;
     [SerializeField] private Image _crosshair;
-    [SerializeField] private Transform _barrel;
     [Space]
     [SerializeField] private Transform _target;
     
@@ -119,7 +118,8 @@ public class Weapon : MonoBehaviour
         {
             targetpoint = hit.point;
             _target = hit.transform;
-            Enemy enemy = _target.GetComponent<Enemy>();
+            Enemy enemy = _target.GetComponentInParent<Enemy>();
+            //Enemy enemy = _target.GetComponent<Enemy>();
             if (enemy != null)
                 enemy.TakeDamage(_damage);
         }
