@@ -17,12 +17,14 @@ public class Weapon : MonoBehaviour
     [Space] [SerializeField] private Transform _target;
 
     private LineRenderer _lineRenderer;
-    private float _timer;
+    private float _timerTier1;
+    private float _timerTier2;
+    private float _timerTier3;
 
     void Start()
     {
-        _lineRenderer = GetComponent<LineRenderer>();
         Cursor.lockState = CursorLockMode.Locked;
+        _lineRenderer = GetComponent<LineRenderer>();
     }
 
     void Update()
@@ -30,108 +32,74 @@ public class Weapon : MonoBehaviour
         if (_type == WeaponType.Laser)
             _lineRenderer.SetPosition(0, _bulletSpawner.position);
         
-        if (Input.GetMouseButton(0))
+        if ((Input.GetMouseButton(0)) && (_tier == WeaponTier.Tier1))
         {
-            if (_type == WeaponType.Bullet && _tier == WeaponTier.Tier1)
-            {
-                _timer += Time.deltaTime;
-                if (_timer < 1 / _fireRate) return;
-                BulletFire();
-                _timer = 0;
-            }
-            else if (_type == WeaponType.Laser && _tier == WeaponTier.Tier1)
-            {
-                _timer += Time.deltaTime;
-                if (_timer < 1 / _fireRate) return;
-                LaserFire();
-                _timer = 0;
-            }
+                _timerTier1 += Time.deltaTime;
+                if (_timerTier1 < 1 / _fireRate) return;
+                Fire();
+                _timerTier1 = 0;
         }
 
-        if (Input.GetMouseButton(1))
+        if ((Input.GetMouseButton(1)) && (_tier == WeaponTier.Tier2))
         {
-            if (_type == WeaponType.Bullet && _tier == WeaponTier.Tier2)
-            {
-                _timer += Time.deltaTime;
-                if (_timer < 1 / _fireRate) return;
-                BulletFire();
-                _timer = 0;
-            }
-            else if (_type == WeaponType.Laser && _tier == WeaponTier.Tier2)
-            {
-                _timer += Time.deltaTime;
-                if (_timer < 1 / _fireRate) return;
-                LaserFire();
-                _timer = 0;
-            }
+            _timerTier2 += Time.deltaTime;
+            if (_timerTier2 < 1 / _fireRate) return;
+            Fire();
+            _timerTier2 = 0;
         }
 
-        if (Input.GetKey(KeyCode.Space))
+        if ((Input.GetKey(KeyCode.Space)) &&(_tier == WeaponTier.Tier3))
         {
-            if (_type == WeaponType.Bullet && _tier == WeaponTier.Tier3)
-            {
-                _timer += Time.deltaTime;
-                if (_timer < 1 / _fireRate) return;
-                BulletFire();
-                _timer = 0;
-            }
-            else if (_type == WeaponType.Laser && _tier == WeaponTier.Tier3)
-            {
-                _timer += Time.deltaTime;
-                if (_timer < 1 / _fireRate) return;
-                LaserFire();
-                _timer = 0;
-            }
+            _timerTier3 += Time.deltaTime;
+            if (_timerTier3 < 1 / _fireRate) return;
+            Fire();
+            _timerTier3 = 0;
         }
 
-        if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1) || Input.GetKeyUp(KeyCode.Space))
+        if (((!Input.GetMouseButton(0)) && (_tier == WeaponTier.Tier1)) || (!Input.GetMouseButton(1) && (_tier == WeaponTier.Tier2)) || (!Input.GetKey(KeyCode.Space)) && (_tier == WeaponTier.Tier3))
         {
             _lineRenderer.SetPosition(0, _bulletSpawner.position);
             _lineRenderer.SetPosition(1, _bulletSpawner.position);
         }
     }
 
-    private void BulletFire()
+    private void Fire()
     {
         Ray ray = _camera.ScreenPointToRay(_crosshair.rectTransform.position);
         RaycastHit hit;
 
         Vector3 targetpoint;
-        if (Physics.Raycast(ray, out hit, _range))
-            targetpoint = hit.point;
-        else
-            targetpoint = ray.GetPoint(_range);
 
-        Vector3 fireDirection = (targetpoint - _bulletSpawner.position).normalized;
-
-        var bullet = Instantiate(_bullet, _bulletSpawner.position, Quaternion.identity);
-
-        bullet.Init(_range / _bulletSpeed);
-        bullet._bulletDamage = _damage;
-        bullet.transform.forward = fireDirection;
-        bullet._rigidbody.AddForce(fireDirection * _bulletSpeed, ForceMode.Impulse);
-    }
-
-    private void LaserFire()
-    {
-        Ray ray = _camera.ScreenPointToRay(_crosshair.rectTransform.position);
-        RaycastHit hit;
-
-        Vector3 targetpoint;
         if (Physics.Raycast(ray, out hit, _range))
         {
             targetpoint = hit.point;
-            _target = hit.transform;
-            Enemy enemy = _target.GetComponentInParent<Enemy>();
-            //Enemy enemy = _target.GetComponent<Enemy>();
-            if (enemy != null)
-                enemy.TakeDamage(_damage);
+            if (_type == WeaponType.Laser)
+            {
+                _target = hit.transform;
+                Enemy enemy = _target.GetComponentInParent<Enemy>();
+                if (enemy != null)
+                    enemy.TakeDamage(_damage);
+            }
         }
         else
             targetpoint = ray.GetPoint(_range);
 
+        if (_type == WeaponType.Laser)
+        {
+            _lineRenderer.SetPosition(0, _bulletSpawner.position);
+            _lineRenderer.SetPosition(1, targetpoint);
+        }
+        else if (_type == WeaponType.Bullet)
+        {
+            Vector3 fireDirection = (targetpoint - _bulletSpawner.position).normalized;
 
-        _lineRenderer.SetPosition(1, targetpoint);
+            var bullet = Instantiate(_bullet, _bulletSpawner.position, Quaternion.identity);
+
+            bullet.Init(_range / _bulletSpeed);
+            bullet._bulletDamage = _damage;
+            bullet.transform.forward = fireDirection;
+            bullet._rigidbody.AddForce(fireDirection * _bulletSpeed, ForceMode.Impulse);
+        }
     }
 }
 
