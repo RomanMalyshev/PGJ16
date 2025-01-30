@@ -55,6 +55,6 @@ public class CameraRotation : MonoBehaviour
 
     private void GetCityPlatformRotate()
     {
-        _rotatePlatform.localRotation = Quaternion.Lerp(_rotatePlatform.localRotation, _cameraRotatorX.localRotation, _rotatePlatformSpeed * Time.deltaTime);
+        _rotatePlatform.localRotation = Quaternion.RotateTowards(_rotatePlatform.localRotation, _cameraRotatorX.localRotation, _rotatePlatformSpeed * Time.deltaTime);
     }
 }
