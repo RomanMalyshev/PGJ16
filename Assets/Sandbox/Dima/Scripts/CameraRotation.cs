@@ -17,6 +17,15 @@ public class CameraRotation : MonoBehaviour
 
     void Update()
     {
+        if (_cameraSettings.CameraDistance > _mixZoom + 2)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        
         if ((-2 < Input.GetAxis("Mouse Y")) && (Input.GetAxis("Mouse Y") < 2))
         {
             GetCameraRotation();
@@ -55,6 +64,9 @@ public class CameraRotation : MonoBehaviour
 
     private void GetCityPlatformRotate()
     {
-        _rotatePlatform.localRotation = Quaternion.RotateTowards(_rotatePlatform.localRotation, _cameraRotatorX.localRotation, _rotatePlatformSpeed * Time.deltaTime);
+        if (_cameraSettings.CameraDistance > _mixZoom + 2)
+        {
+            _rotatePlatform.localRotation = Quaternion.RotateTowards(_rotatePlatform.localRotation, _cameraRotatorX.localRotation, _rotatePlatformSpeed * Time.deltaTime);    
+        }
     }
 }

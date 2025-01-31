@@ -8,24 +8,31 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Image _bar;
     [SerializeField] private float _damage;
     [SerializeField] private float _attackRange;
-    [Space] [SerializeField] private float _speed = 10f;
+    [Space] 
+    [SerializeField] private float _speed = 10f;
     [SerializeField] private float _rotateSpeed = 400f;
     [SerializeField] private Transform _homeSpot;
     [SerializeField] private float _patrolDistance = 50f;
     [SerializeField] private float _sightDistance = 100f;
     [SerializeField] private float _chaseDistance = 150f;
-    [Space] [SerializeField] List<EnemyWeapon> _weapons;
+    [Space] 
+    [SerializeField] List<EnemyWeapon> _weapons;
     [SerializeField] Transform _enemyCity;
-    [Space] [SerializeField] private bool _isPatrol;
+    [Space] 
+    [SerializeField] private bool _isPatrol;
     [SerializeField] private bool _isGoHome;
     [SerializeField] private bool _isAttacking;
-    [Space] [SerializeField] private float DistanceToPlayer;
+    [Space] 
+    [SerializeField] private float DistanceToPlayer;
     [SerializeField] private float DistanceToHomeSpot;
     [SerializeField] private Transform _target;
-    [Space] [SerializeField] private CharacterController _controller;
+    [Space] 
+    //[SerializeField] private CharacterController _controller;
     [SerializeField] private Transform _enemyRotatePlatform;
     [SerializeField] private Canvas _canvas;
+    
     private float health;
+    
     [SerializeField] private Vector3 _patrolPoint;
     [SerializeField] private bool _goToPatrolPoint = false;
 
@@ -87,9 +94,9 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            var move = (new Vector3(_patrolPoint.x - _enemyCity.position.x, 0, _patrolPoint.z - _enemyCity.position.z))
-                .normalized;
-            _controller.Move(move * _speed * Time.deltaTime);
+            var move = (new Vector3(_patrolPoint.x - _enemyCity.position.x, 0, _patrolPoint.z - _enemyCity.position.z)).normalized;
+            _enemyCity.transform.Translate(move * (_speed * Time.deltaTime));
+           // _controller.Move(move * _speed * Time.deltaTime);
         }
 
         if (Mathf.Abs(_enemyCity.position.x - _patrolPoint.x) < 0.5 &&
@@ -116,7 +123,8 @@ public class Enemy : MonoBehaviour
 
         if (Vector3.Distance(_enemyCity.position, _target.position) > _attackRange)
         {
-            _controller.Move(move * _speed * Time.deltaTime);
+            _enemyCity.transform.Translate(move * (_speed * Time.deltaTime));
+            //_controller.Move(move * _speed * Time.deltaTime);
         }
         else
         {
@@ -131,7 +139,8 @@ public class Enemy : MonoBehaviour
     {
         var move = (new Vector3(_homeSpot.position.x - _enemyCity.position.x, 0,
             _homeSpot.position.z - _enemyCity.position.z)).normalized;
-        _controller.Move(move * _speed * Time.deltaTime);
+        _enemyCity.transform.Translate(move * (_speed * Time.deltaTime));
+        //_controller.Move(move * _speed * Time.deltaTime);
         _goToPatrolPoint = false;
     }
 

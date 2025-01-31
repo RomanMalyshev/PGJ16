@@ -200,6 +200,10 @@ PrefabInstance:
       propertyPath: _type
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2190607153240953475, guid: 9a709ae1ee3799e4db8e85787dfbc077, type: 3}
+      propertyPath: _bullet
+      value: 
+      objectReference: {fileID: 527859796980911001, guid: b8a0d6def6e5f6145a8562baea0a2f5e, type: 3}
     - target: {fileID: 4829520818072596146, guid: 9a709ae1ee3799e4db8e85787dfbc077, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.0787

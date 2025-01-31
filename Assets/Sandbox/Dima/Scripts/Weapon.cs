@@ -23,7 +23,6 @@ public class Weapon : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
         _lineRenderer = GetComponent<LineRenderer>();
     }
 
